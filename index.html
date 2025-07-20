@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Wild Pyramid Quest - Base Game</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background: url('Assets/pyramid-bg.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+      font-family: sans-serif;
+    }
+    #slot-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 80px);
+      grid-template-rows: repeat(5, 80px);
+      gap: 8px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    .slot-cell {
+      width: 80px;
+      height: 80px;
+      background: #f8e8aa;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+  <h1 style="text-align:center;">Wild Pyramid Quest</h1>
+  <div id="slot-grid"></div>
+  <div style="text-align:center; margin-top:20px;">
+    <button onclick="spin()">SPIN</button>
+  </div>
+  <script>
+    const symbols = ['A', 'K', 'Q', 'J', '10', 'Pharaoh', 'Queen', 'Wild', 'Scatter', 'Bonus'];
+    function spin() {
+      const grid = document.getElementById('slot-grid');
+      grid.innerHTML = '';
+      for (let i = 0; i < 25; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'slot-cell';
+        const sym = symbols[Math.floor(Math.random() * symbols.length)];
+        cell.innerText = sym;
+        grid.appendChild(cell);
+      }
+    }
+    spin();
+  </script>
+</body>
+</html>
