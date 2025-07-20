@@ -1,113 +1,339 @@
-<!DOCTYPE html><style>
-  body {
-    font-family: Arial, sans-serif;
-    background-image: url('b4500597b63e63ca1f60af0477345247.jpg');
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    color: #fff;
-    text-align: center;
-    margin: 0;
-  }
-
-  h1 {
-    margin: 20px 0;
-    text-shadow: 2px 2px 5px #000;
-  }
-
-  #slot-container {
-    display: grid;
-    grid-template-columns: repeat(5, 100px);
-    grid-template-rows: repeat(3, 100px);
-    gap: 5px;
-    justify-content: center;
-    margin-bottom: 20px;
-  }
-
-  .slot {
-    width: 100px;
-    height: 100px;
-    background-color: rgba(0, 0, 0, 0.6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    color: white;
-    border: 2px solid #fff;
-    border-radius: 8px;
-  }
-
-  button {
-    padding: 10px 20px;
-    font-size: 16px;
-    background: #e67e22;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.4);
-  }
-
-  .scatter {
-    color: #f1c40f;
-    font-weight: bold;
-  }
-
-  .wild {
-    color: #e74c3c;
-    font-weight: bold;
-  }
-</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Wild Quest Slot Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url('Assets/b4500597b63e63ca1f60af0477345247.jpg');
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      color: #fff;
+      margin: 0;
+    }
+    h1 {
+      margin: 20px 0 5px 0;
+      text-shadow: 2px 2px 5px #000;
+      font-size: 45px;
+      letter-spacing: 2px;
+    }
+    #slot-game-ui {
+      background: rgba(18, 63, 82, 0.85);
+      margin: 0 auto;
+      border-radius: 18px;
+      max-width: 490px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+      padding: 20px 0 18px 0;
+      margin-bottom: 15px;
+    }
+    #slot-container {
+      display: grid;
+      grid-template-columns: repeat(5, 90px);
+      grid-template-rows: repeat(3, 90px);
+      gap: 7px;
+      justify-content: center;
+      margin: 15px auto 18px auto;
+    }
+    .slot {
+      width: 90px;
+      height: 90px;
+      background: linear-gradient(145deg, rgba(40,60,110,0.85) 80%, rgba(18,63,82,0.4) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      color: #fff;
+      border: 3px solid #2ecae6;
+      border-radius: 12px;
+      box-shadow: 0 2px 7px rgba(0,0,0,0.5);
+      position: relative;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+    .scatter {
+      color: #f1c40f;
+      font-weight: bold;
+      border: 3px solid #ffe066;
+      background: linear-gradient(135deg, #3053d8 70%, #9be3ff 100%);
+      box-shadow: 0 0 20px #ffe06680;
+    }
+    .wild {
+      color: #ff7272;
+      font-weight: bold;
+      border: 3px solid #ff7272;
+      background: linear-gradient(135deg, #fdbb2d 70%, #ff7272 100%);
+      box-shadow: 0 0 20px #ff727280;
+    }
+    .slot img {
+      max-width: 70px;
+      max-height: 70px;
+      border-radius: 10px;
+      display: block;
+      margin: auto;
+    }
+    #info-bar {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      margin: 12px 0 0 0;
+      color: #fff;
+      font-size: 20px;
+    }
+    .credits, .bet {
+      background: #2ecae6;
+      border-radius: 8px;
+      padding: 4px 14px;
+      font-weight: bold;
+      box-shadow: 0 2px 8px #2ecae660;
+    }
+    .buy-spins-btn {
+      background: linear-gradient(135deg, #3053d8 60%, #2ecae6 100%);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 32px;
+      font-size: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 2px 8px #3053d880;
+      margin: 10px 0 0 0;
+      transition: background 0.2s;
+    }
+    .buy-spins-btn:hover {
+      background: linear-gradient(135deg, #2ecae6 60%, #3053d8 100%);
+    }
+    .spin-btn {
+      background: #fdbb2d;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 16px 54px;
+      font-size: 26px;
+      font-weight: bold;
+      cursor: pointer;
+      margin: 4px 0 0 0;
+      box-shadow: 0 2px 8px #fdbb2d80;
+      letter-spacing: 1px;
+      transition: background 0.2s;
+    }
+    .spin-btn:hover {
+      background: #ffe066;
+      color: #3053d8;
+    }
+    #message-bar {
+      margin: 18px 0 0 0;
+      font-size: 22px;
+      font-weight: bold;
+      text-shadow: 1px 2px 6px #000;
+    }
+  </style>
 </head>
 <body>
+  <h1>Wild Quest</h1>
+  <div id="slot-game-ui">
+    <div id="slot-container"></div>
+    <div id="info-bar">
+      <span class="credits">CREDIT: <span id="credit">500.00</span></span>
+      <span class="bet">BET: <span id="bet">0.25</span></span>
+    </div>
+    <button class="spin-btn" onclick="spin()">SPIN</button>
+    <button class="buy-spins-btn" onclick="buyFreeSpins()">BUY FREE SPINS $200</button>
+    <div id="message-bar"></div>
+  </div>
 
-<h1>🎰 Wild Quest Slot Game</h1>
-<div id="slot-container"></div>
-<button onclick="spin()">Spin</button>
+  <script>
+    // Symbol data for slot game, you can upgrade with image links if you have assets
+    // Demo: using emoji or colored letters, can be replaced with images later.
+    const symbols = [
+      { type: 'A', display: 'A', color: '#ff3e3e' },
+      { type: 'K', display: 'K', color: '#7bed9f' },
+      { type: 'Q', display: 'Q', color: '#70a1ff' },
+      { type: 'J', display: 'J', color: '#ffe066' },
+      { type: 'MAP', display: '🗺️', color: '#b2bec3' },
+      { type: 'ROPE', display: '🪢', color: '#55efc4' },
+      { type: 'PICK', display: '⛏️', color: '#636e72' },
+      { type: 'TENT', display: '🏕️', color: '#fab1a0' },
+      { type: 'SCATTER', display: '⛰️', color: '#3053d8' }, // 3+ triggers free spins
+      { type: 'WILD', display: '🧊', color: '#fdbb2d' } // substitutes, high payout
+    ];
 
-<script>
-  const symbols = ['A', 'K', 'Q', 'J', '10', 'WILD', 'SCATTER'];
+    let credit = 500.00;
+    let bet = 0.25;
+    let freeSpins = 0;
+    let inFreeSpins = false;
+    let freeSpinWins = 0;
 
-  function getRandomSymbol() {
-    return symbols[Math.floor(Math.random() * symbols.length)];
-  }
+    function getRandomSymbol() {
+      // Weighted random for higher chance of normal symbols, less for WILD/SCATTER
+      const weighted = [
+        ...Array(6).fill(symbols[0]), // A
+        ...Array(5).fill(symbols[1]), // K
+        ...Array(5).fill(symbols[2]), // Q
+        ...Array(5).fill(symbols[3]), // J
+        ...Array(2).fill(symbols[4]), // MAP
+        ...Array(2).fill(symbols[5]), // ROPE
+        ...Array(2).fill(symbols[6]), // PICK
+        ...Array(2).fill(symbols[7]), // TENT
+        ...Array(1).fill(symbols[8]), // SCATTER
+        ...Array(1).fill(symbols[9]), // WILD
+      ];
+      return weighted[Math.floor(Math.random() * weighted.length)];
+    }
 
-  function spin() {
-    const slotContainer = document.getElementById('slot-container');
-    slotContainer.innerHTML = '';
-
-    let scatterCount = 0;
-    let wildCount = 0;
-
-    for (let i = 0; i < 15; i++) {
-      const symbol = getRandomSymbol();
-      const div = document.createElement('div');
-      div.classList.add('slot');
-
-      if (symbol === 'SCATTER') {
-        div.classList.add('scatter');
-        div.innerText = '👨‍🔫'; // Boy with gun
-        scatterCount++;
-      } else if (symbol === 'WILD') {
-        div.classList.add('wild');
-        div.innerText = '👩‍🦰'; // Wild girl
-        wildCount++;
-      } else {
-        div.innerText = symbol;
+    function spin() {
+      if (inFreeSpins && freeSpins === 0) {
+        endFreeSpins();
+        return;
       }
 
-      slotContainer.appendChild(div);
+      document.getElementById('message-bar').innerText = '';
+      const slotContainer = document.getElementById('slot-container');
+      slotContainer.innerHTML = '';
+      let scatterCount = 0;
+      let wildCount = 0;
+      let winAmount = 0;
+      let marineWin = false;
+
+      // 5x3 grid
+      let slots = [];
+      for (let r = 0; r < 3; r++) {
+        for (let c = 0; c < 5; c++) {
+          const symbol = getRandomSymbol();
+          slots.push(symbol);
+        }
+      }
+
+      // Render the slots
+      slots.forEach((symbol, idx) => {
+        const div = document.createElement('div');
+        div.classList.add('slot');
+        div.style.color = symbol.color;
+        if (symbol.type === 'SCATTER') {
+          div.classList.add('scatter');
+          div.innerText = symbol.display;
+          scatterCount++;
+        } else if (symbol.type === 'WILD') {
+          div.classList.add('wild');
+          div.innerText = symbol.display;
+          wildCount++;
+        } else {
+          div.innerText = symbol.display;
+        }
+        slotContainer.appendChild(div);
+      });
+
+      // Check for 3 or more scatters anywhere
+      if (!inFreeSpins && scatterCount >= 3) {
+        setTimeout(() => {
+          startFreeSpins();
+        }, 1200);
+        document.getElementById('message-bar').innerText = "You've won Free Spins!";
+        return;
+      }
+
+      // Win logic: 5 lines (horizontal only), wild substitutes
+      // Calculate wins, demo: 90% win rate in free spins, normal lower
+      let lines = [
+        [0,1,2,3,4], // Top
+        [5,6,7,8,9], // Middle
+        [10,11,12,13,14], // Bottom
+        [0,6,12,8,4], // Diagonal /
+        [10,6,2,8,14] // Diagonal \
+      ];
+      lines.forEach(line => {
+        let lineSymbols = line.map(i => slots[i].type);
+        let hasWild = lineSymbols.includes('WILD');
+        let mainSym = lineSymbols.find(s => s !== 'WILD');
+        if (!mainSym) return; // all wilds, rare
+
+        // Normal win: all same or wild
+        let winLine = lineSymbols.every(s => s === mainSym || s === 'WILD');
+        if (winLine) {
+          let base = 2.00;
+          if (mainSym === 'A' || mainSym === 'K') base = 1.20;
+          if (mainSym === 'Q' || mainSym === 'J') base = 0.90;
+          if (mainSym === 'SCATTER') base = 5.00;
+          if (mainSym === 'WILD') base = 6.00;
+          winAmount += base * bet;
+          if (mainSym === 'WILD') wildCount++;
+        }
+      });
+
+      // In free spins, 90% chance of win (force a win for demo)
+      if (inFreeSpins && Math.random() < 0.9) {
+        marineWin = true;
+        winAmount += (Math.random() * 5 + 2) * bet; // demo: $2-$7
+      }
+
+      if (!inFreeSpins) {
+        credit -= bet;
+      } else {
+        freeSpins--;
+        freeSpinWins += winAmount;
+      }
+
+      if (winAmount > 0) {
+        document.getElementById('message-bar').innerText = `Congratulations! You won $${winAmount.toFixed(2)}!`;
+        credit += winAmount;
+      } else if (inFreeSpins && marineWin) {
+        document.getElementById('message-bar').innerText = `Free Spin Win! You won $${winAmount.toFixed(2)}!`;
+        credit += winAmount;
+      }
+      updateUI();
+
+      // End free spins if needed
+      if (inFreeSpins && freeSpins === 0) {
+        setTimeout(endFreeSpins, 1200);
+      }
     }
 
-    // Check for 3 or more scatters
-    if (scatterCount >= 3) {
-      setTimeout(() => {
-        window.location.href = 'freespins.html';
-      }, 1500);
+    function updateUI() {
+      document.getElementById('credit').innerText = credit.toFixed(2);
+      document.getElementById('bet').innerText = bet.toFixed(2);
+      if (inFreeSpins) {
+        document.getElementById('info-bar').innerHTML = `
+          <span class="credits">CREDIT: <span id="credit">${credit.toFixed(2)}</span></span>
+          <span class="bet">BET: <span id="bet">${bet.toFixed(2)}</span></span>
+          <span class="freespins">FREE SPINS LEFT: <b>${freeSpins}</b></span>
+        `;
+      } else {
+        document.getElementById('info-bar').innerHTML = `
+          <span class="credits">CREDIT: <span id="credit">${credit.toFixed(2)}</span></span>
+          <span class="bet">BET: <span id="bet">${bet.toFixed(2)}</span></span>
+        `;
+      }
     }
-  }
-</script>
 
+    function startFreeSpins() {
+      inFreeSpins = true;
+      freeSpins = 8;
+      freeSpinWins = 0;
+      document.getElementById('message-bar').innerText = "8 Free Spins started!";
+      updateUI();
+    }
+
+    function endFreeSpins() {
+      inFreeSpins = false;
+      document.getElementById('message-bar').innerText = `Free Spins Over! Total Win: $${freeSpinWins.toFixed(2)}`;
+      updateUI();
+    }
+
+    function buyFreeSpins() {
+      if (credit < 200) {
+        document.getElementById('message-bar').innerText = "Not enough credits!";
+        return;
+      }
+      credit -= 200;
+      startFreeSpins();
+      updateUI();
+    }
+
+    // Initial UI setup
+    updateUI();
+    spin();
+  </script>
 </body>
 </html>
