@@ -2,439 +2,443 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Wild Quest Slot Game</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Wild Pyramid Quest</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Egyptian Adventure Slot Game -->
   <style>
-    :root {
-      --slot-size: 19vw;
-      --slot-gap: 2vw;
-      --max-slot-size: 96px;
-      --icon-border-radius: 13px;
-    }
     body {
-      font-family: 'Arial Rounded MT Bold', Arial, sans-serif;
-      background-image: url('Assets/b4500597b63e63ca1f60af0477345247.jpg');
-      background-repeat: no-repeat;
+      font-family: 'Trebuchet MS', 'Arial Rounded MT Bold', Arial, sans-serif;
+      background: url('Assets/pyramid-bg.jpg') no-repeat center center fixed;
       background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-      color: #fff;
       margin: 0;
+      color: #fff;
       min-height: 100vh;
+      overflow-x: hidden;
+    }
+    #bg-overlay {
+      position: fixed;
+      top:0; left:0; width:100vw; height:100vh;
+      background: linear-gradient(180deg, #e7b14c99 0%, #d7a94a44 60%, #54351088 100%);
+      z-index: 0;
+      pointer-events: none;
     }
     h1 {
-      margin: 18px 0 0 0;
-      font-size: 7vw;
-      line-height: 1;
-      text-shadow: 2px 2px 9px #0008;
-      letter-spacing: 1.5vw;
-      font-weight: bold;
       text-align: center;
+      margin: 2vw 0 1vw 0;
+      font-size: 7vw;
+      font-weight: bold;
+      color: #f5e6b2;
+      text-shadow: 0 4px 10px #542f0a99, 1px 2px 3px #fff8;
+      letter-spacing: 0.3vw;
     }
     #main-ui {
-      background: rgba(18, 63, 82, 0.89);
-      margin: 0 auto;
-      border-radius: 3vw;
-      max-width: 490px;
-      box-shadow: 0 8px 36px rgba(0,0,0,0.45);
+      background: rgba(50, 30, 10, 0.75);
+      border-radius: 2vw;
+      box-shadow: 0 8px 36px #422f0e66;
+      max-width: 480px;
+      margin: 0 auto 5vw auto;
       padding: 2vw 0 2vw 0;
-      margin-bottom: 5vw;
-    }
-    #slot-container {
-      display: grid;
-      grid-template-columns: repeat(5, minmax(0, var(--slot-size)));
-      grid-template-rows: repeat(3, minmax(0, var(--slot-size)));
-      gap: var(--slot-gap);
-      justify-content: center;
-      margin: 3vw auto 2vw auto;
-      max-width: calc(5 * var(--max-slot-size) + 4 * var(--slot-gap));
-    }
-    .slot {
-      background: linear-gradient(145deg, #1e304d 80%, #2ecae6 100%);
-      border: 2px solid #36b3d9;
-      border-radius: var(--icon-border-radius);
-      box-shadow: 0 2px 11px #172b3b55;
       position: relative;
-      width: 100%;
-      height: 100%;
+      z-index: 1;
+    }
+    #slot-frame {
+      padding: 1vw;
+      border: 8px solid #cba23b;
+      border-radius: 2vw;
+      background: linear-gradient(135deg, #8f6c2e 50%, #ffe066 100%);
+      box-shadow: 0 4px 22px #0008;
+      margin: 0 auto 2vw auto;
+      max-width: 430px;
+    }
+    #slot-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 66px));
+      grid-template-rows: repeat(3, minmax(0, 66px));
+      gap: 10px;
+      justify-content: center;
+      margin: 0 auto;
+      position: relative;
+    }
+    .slot-cell {
+      background: linear-gradient(145deg, #f6d26a 60%, #fff3 100%);
+      border: 3px solid #cba23b;
+      border-radius: 16px;
+      box-shadow: 0 4px 18px #cba23b55, 0 1px 2px #fff6;
       display: flex;
       align-items: center;
       justify-content: center;
+      position: relative;
       overflow: hidden;
-      padding: 2px;
+      width: 66px;
+      height: 66px;
       transition: box-shadow 0.2s;
+      z-index: 1;
     }
-    .slot img {
-      max-width: 87%;
-      max-height: 87%;
-      border-radius: calc(var(--icon-border-radius) * 0.8);
-      display: block;
-      margin: auto;
-      box-shadow: 0 0 6px #0008;
-      background: #fff3;
+    .slot-cell img {
+      max-width: 58px;
+      max-height: 58px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px #0007;
+      background: #fff2;
+      transition: filter 0.3s;
     }
-    .scatter {
-      border: 2.5px solid #ffe066;
-      box-shadow: 0 0 22px #ffe066a0;
-      background: linear-gradient(135deg, #3053d8 70%, #9be3ff 100%);
+    .scatter { box-shadow: 0 0 22px #2ecae6a0, 0 1px 2px #fff6; }
+    .wild { box-shadow: 0 0 22px #ffe066aa, 0 1px 2px #fff8; }
+    .bonus { box-shadow: 0 0 18px #e7b14caa, 0 1px 2px #fff7; }
+    .sparkle {
+      animation: sparkle 0.9s linear;
     }
-    .wild {
-      border: 2.5px solid #ff7272;
-      box-shadow: 0 0 22px #ff7272a0;
-      background: linear-gradient(135deg, #fdbb2d 70%, #ff7272 100%);
+    @keyframes sparkle {
+      0% { filter: brightness(1); }
+      20% { filter: brightness(2.7) saturate(1.4); }
+      60% { filter: brightness(1.1); }
+      100% { filter: brightness(1); }
     }
-    #info-bar {
+    .dust-drop {
+      animation: dustdrop 0.6s cubic-bezier(.25,.8,.25,1);
+    }
+    @keyframes dustdrop {
+      0% { opacity:0; transform: translateY(-32px) scale(1.3); }
+      40% { opacity:1; }
+      100% { opacity:1; transform: translateY(0) scale(1); }
+    }
+    #ui-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin: 3vw 4vw 0 4vw;
-      color: #fff;
-      font-size: 5vw;
-      gap: 2vw;
+      margin: 2vw 5vw 0 5vw;
+      font-size: 1.35em;
       flex-wrap: wrap;
+      gap: 2vw;
     }
-    .credits, .bet {
-      background: #2ecae6;
-      border-radius: 1vw;
-      padding: 0.7vw 3vw;
+    .balance, .bet, .win {
+      background: linear-gradient(90deg, #ffe066 70%, #cba23b 100%);
+      border-radius: 1.2vw;
+      padding: 0.5vw 2vw;
       font-weight: bold;
-      box-shadow: 0 2px 8px #2ecae670;
+      color: #542f0a;
+      box-shadow: 0 2px 8px #cba23b60;
+      min-width: 80px;
+      text-align:center;
     }
     .freespins {
-      background: #ffe066;
-      color: #3053d8;
-      border-radius: 1vw;
-      padding: 0.7vw 2vw;
+      background: #2ecae6;
+      color: #fff;
+      border-radius: 1.2vw;
+      padding: 0.5vw 1.1vw;
       font-weight: bold;
-      box-shadow: 0 2px 8px #ffe06670;
+      box-shadow: 0 2px 8px #2ecae660;
+      min-width: 80px;
+      text-align:center;
     }
-    .spin-btn, .buy-spins-btn {
-      display: block;
-      width: 100%;
-      max-width: 360px;
-      margin: 3vw auto 0 auto;
-      font-size: 6vw;
-      padding: 2.3vw 0;
-      border-radius: 3vw;
+    #controls {
+      margin: 3vw auto 1vw auto;
+      display: flex;
+      justify-content: center;
+      gap: 2vw;
+    }
+    .spin-btn, .turbo-btn, .buyspins-btn {
+      font-family: inherit;
+      font-size: 2em;
+      padding: 1.2vw 2.8vw;
+      border-radius: 2vw;
       border: none;
       font-weight: bold;
-      box-shadow: 0 2px 18px #fdbb2d90;
+      margin: 0 0.4vw;
+      box-shadow: 0 2px 14px #cba23b80;
       cursor: pointer;
       transition: background 0.2s;
       outline: none;
-      letter-spacing: 0.5vw;
+      letter-spacing: 0.1vw;
+      background: url('Assets/stone-dial.png') no-repeat center center;
+      background-size: cover;
+      color: #542f0a;
+      border: 2px solid #cba23b;
     }
-    .spin-btn {
-      background: linear-gradient(135deg, #fdbb2d 55%, #ffe066 100%);
+    .turbo-btn {
+      background: url('Assets/turbo-dial.png') no-repeat center center;
+      background-size: cover;
       color: #fff;
-      margin-bottom: 2vw;
+      border: 2px solid #2ecae6;
+      box-shadow: 0 2px 14px #2ecae680;
     }
-    .spin-btn:active { background: #ffe066; color: #3053d8; }
-    .buy-spins-btn {
-      background: linear-gradient(135deg, #3053d8 60%, #2ecae6 100%);
-      color: #fff;
-      margin-bottom: 0.8vw;
-      box-shadow: 0 2px 18px #3053d8a0;
+    .buyspins-btn {
+      background: linear-gradient(135deg, #e7b14c 55%, #ffe066 100%);
+      color: #542f0a;
+      border: 2px solid #f5e6b2;
+      box-shadow: 0 2px 14px #e7b14c80;
+      font-size: 1.3em;
+      padding: 1vw 3vw;
     }
-    .buy-spins-btn:active { background: #2ecae6; color: #3053d8; }
+    .spin-btn:active { background: #cba23b; color: #fff; }
+    .turbo-btn:active { background: #2ecae6; color: #ffe066; }
+    .buyspins-btn:active { background: #ffe066; color: #2ecae6; }
     #message-bar {
       margin: 2vw auto 0 auto;
-      font-size: 5vw;
+      font-size: 1.25em;
       font-weight: bold;
       text-shadow: 1px 2px 8px #000;
       text-align: center;
-      min-height: 6vw;
+      min-height: 2em;
       max-width: 85vw;
-    }
-    #line-icons {
-      display: flex;
-      justify-content: center;
-      gap: 6vw;
-      margin: 3vw 0 2vw 0;
-    }
-    .line-icon {
-      background: #fff;
-      border-radius: 50%;
-      width: 7vw;
-      height: 7vw;
-      min-width: 38px; min-height: 38px;
-      max-width: 52px; max-height: 52px;
-      font-size: 5vw;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 2px 8px #3053d880;
-      color: #3053d8;
-      font-weight: bold;
-    }
-    #info-btn {
-      position: fixed;
-      right: 16px;
-      top: 16px;
-      background: #fff;
-      color: #3053d8;
-      border-radius: 50%;
-      width: 48px;
-      height: 48px;
-      border: none;
-      box-shadow: 0 2px 8px #3053d880;
-      font-size: 28px;
-      font-weight: bold;
-      cursor: pointer;
-      z-index: 2;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    #info-panel {
-      position: fixed;
-      right: 22px;
-      top: 70px;
-      background: #fff;
-      color: #222;
-      border-radius: 22px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.25);
-      padding: 18px 24px;
-      max-width: 320px;
-      min-width: 220px;
-      font-size: 18px;
-      display: none;
-      z-index: 3;
-    }
-    #info-panel h2 {
-      margin-top: 0;
-      font-size: 22px;
-      font-weight: bold;
-      color: #3053d8;
-    }
-    #info-panel button {
-      background: #3053d8;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      padding: 6px 18px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 12px;
+      color: #ffe066;
     }
     @media (max-width: 600px) {
-      :root { --slot-size: 17vw; --slot-gap: 1.6vw; }
-      h1 { font-size: 8vw; }
-    }
-    @media (max-width: 420px) {
-      :root { --slot-size: 16vw; --slot-gap: 1.1vw; }
-      #main-ui { padding: 3vw 0 3vw 0; }
-      h1 { font-size: 10vw; }
-      #message-bar, #info-bar { font-size: 6vw; }
-      #line-icons { margin: 6vw 0 2vw 0; }
+      #main-ui, #slot-frame { max-width: 98vw; }
+      #slot-grid { gap: 2vw; }
+      .slot-cell { width: 16vw; height: 16vw; }
+      .slot-cell img { max-width: 14vw; max-height: 14vw; }
+      #ui-bar { font-size: 4vw; gap: 1vw; }
+      .balance, .bet, .win, .freespins { min-width: 22vw; font-size: 1.2em; }
+      h1 { font-size: 11vw; }
+      .spin-btn, .turbo-btn, .buyspins-btn { font-size: 6vw; padding: 3vw 3vw; }
+      #message-bar { font-size: 4vw; }
     }
   </style>
 </head>
 <body>
-  <h1>Wild Quest</h1>
-  <button id="info-btn" onclick="toggleInfoPanel()">i</button>
-  <div id="info-panel">
-    <h2>Game Info</h2>
-    <ul>
-      <li>5x3 slot grid, 3 pay lines (horizontal)</li>
-      <li>Trigger Free Spins by landing 3+ Scatter icons</li>
-      <li>Buy 8 Free Spins for $200 any time</li>
-      <li>Replace slot icons with your uploaded images</li>
-      <li>Credit, Bet, and Win info shown below</li>
-    </ul>
-    <button onclick="toggleInfoPanel()">Close</button>
-  </div>
+  <div id="bg-overlay"></div>
+  <h1>Wild Pyramid Quest</h1>
   <div id="main-ui">
-    <div id="slot-container"></div>
-    <div id="line-icons">
-      <span class="line-icon" title="Top Line">&#8213;</span>
-      <span class="line-icon" title="Middle Line">&#8213;</span>
-      <span class="line-icon" title="Bottom Line">&#8213;</span>
+    <div id="slot-frame">
+      <div id="slot-grid"></div>
     </div>
-    <div id="info-bar">
-      <span class="credits">CREDIT: <span id="credit">500.00</span></span>
-      <span class="bet">BET: <span id="bet">0.25</span></span>
+    <div id="ui-bar">
+      <span class="balance">BALANCE: $<span id="balance">1000.00</span></span>
+      <span class="bet">BET: $<span id="bet">2.50</span></span>
+      <span class="win">WIN: $<span id="win">0.00</span></span>
+      <span class="freespins" style="display:none;">FREE SPINS: <span id="freespins">8</span></span>
     </div>
-    <button class="spin-btn" onclick="spin()">SPIN</button>
-    <button class="buy-spins-btn" onclick="buyFreeSpins()">BUY FREE SPINS $200</button>
+    <div id="controls">
+      <button class="spin-btn" onclick="spin()">SPIN</button>
+      <button class="turbo-btn" onclick="spin(true)">TURBO</button>
+      <button class="buyspins-btn" onclick="buyFreeSpins()">BUY 8 FREE SPINS ($20)</button>
+    </div>
     <div id="message-bar"></div>
   </div>
+  <!-- Audio elements for background music and sound effects -->
+  <audio id="bg-music" src="Assets/egypt-music.mp3" loop preload="auto"></audio>
+  <audio id="reel-sound" src="Assets/reel-spin.mp3"></audio>
+  <audio id="win-sound" src="Assets/win-coins.mp3"></audio>
+  <audio id="scatter-sound" src="Assets/scatter-chime.mp3"></audio>
   <script>
-    // Replace with your own uploaded images for each symbol.
-    // Example file names: Assets/A.png, Assets/K.png, etc.
+    // Egyptian-themed slot symbols with image assets. Replace src with your own images.
     const slotSymbols = [
-      { name: 'A', img: 'Assets/A.png' },
-      { name: 'K', img: 'Assets/K.png' },
-      { name: 'Q', img: 'Assets/Q.png' },
-      { name: 'J', img: 'Assets/J.png' },
-      { name: 'MAP', img: 'Assets/MAP.png' },
-      { name: 'ROPE', img: 'Assets/ROPE.png' },
-      { name: 'PICK', img: 'Assets/PICK.png' },
-      { name: 'TENT', img: 'Assets/TENT.png' },
-      { name: 'SCATTER', img: 'Assets/SCATTER.png' },
-      { name: 'WILD', img: 'Assets/WILD.png' }
+      // High-value
+      { name: "Pharaoh", img: "Assets/pharaoh.png", type: "high" },
+      { name: "Queen", img: "Assets/queen.png", type: "high" },
+      { name: "Anubis", img: "Assets/anubis.png", type: "high" },
+      { name: "Scarab", img: "Assets/scarab.png", type: "high" },
+      { name: "Treasure", img: "Assets/treasure.png", type: "high" },
+      // Mid-value
+      { name: "Ankh", img: "Assets/ankh.png", type: "mid" },
+      { name: "Sphinx", img: "Assets/sphinx.png", type: "mid" },
+      { name: "Horus", img: "Assets/horus.png", type: "mid" },
+      // Low-value
+      { name: "A", img: "Assets/A.png", type: "low" },
+      { name: "K", img: "Assets/K.png", type: "low" },
+      { name: "Q", img: "Assets/Q.png", type: "low" },
+      { name: "J", img: "Assets/J.png", type: "low" },
+      { name: "10", img: "Assets/10.png", type: "low" },
+      // Wild, Scatter, Bonus
+      { name: "Wild", img: "Assets/wild-goddess.png", type: "wild" },
+      { name: "Scatter", img: "Assets/scatter-explorer.png", type: "scatter" },
+      { name: "Bonus", img: "Assets/pyramid-door.png", type: "bonus" }
     ];
-    // Fallback if image missing
-    const fallbackSymbol = {
-      'A': 'A', 'K': 'K', 'Q': 'Q', 'J': 'J',
-      'MAP': '🗺️', 'ROPE': '🪢', 'PICK': '⛏️', 'TENT': '🏕️',
-      'SCATTER': 'SCATTER', 'WILD': 'WILD'
-    };
 
-    let credit = 500.00;
-    let bet = 0.25;
-    let freeSpins = 0;
-    let inFreeSpins = false;
-    let freeSpinWins = 0;
-
+    // Weighted symbol appearance
     function getRandomSymbol() {
-      // Weighted random for normal, less for WILD/SCATTER
       const weighted = [
-        ...Array(6).fill(slotSymbols[0]), ...Array(5).fill(slotSymbols[1]), ...Array(5).fill(slotSymbols[2]), ...Array(5).fill(slotSymbols[3]),
-        ...Array(2).fill(slotSymbols[4]), ...Array(2).fill(slotSymbols[5]), ...Array(2).fill(slotSymbols[6]), ...Array(2).fill(slotSymbols[7]),
-        ...Array(1).fill(slotSymbols[8]), ...Array(1).fill(slotSymbols[9])
+        ...Array(4).fill(slotSymbols[0]), ...Array(3).fill(slotSymbols[1]), ...Array(3).fill(slotSymbols[2]), ...Array(2).fill(slotSymbols[3]), ...Array(2).fill(slotSymbols[4]),
+        ...Array(3).fill(slotSymbols[5]), ...Array(3).fill(slotSymbols[6]), ...Array(3).fill(slotSymbols[7]),
+        ...Array(8).fill(slotSymbols[8]), ...Array(7).fill(slotSymbols[9]), ...Array(7).fill(slotSymbols[10]), ...Array(7).fill(slotSymbols[11]), ...Array(7).fill(slotSymbols[12]),
+        ...Array(1).fill(slotSymbols[13]), // Wild
+        ...Array(1).fill(slotSymbols[14]), // Scatter
+        ...Array(1).fill(slotSymbols[15])  // Bonus
       ];
       return weighted[Math.floor(Math.random() * weighted.length)];
     }
 
-    function renderSlotIcon(symbol) {
-      const img = document.createElement('img');
-      img.src = symbol.img;
-      img.alt = symbol.name;
-      img.onerror = function() { img.replaceWith(document.createTextNode(fallbackSymbol[symbol.name] || symbol.name)); };
-      return img;
+    let balance = 1000.00;
+    let bet = 2.50;
+    let win = 0.00;
+    let freeSpins = 0;
+    let inFreeSpins = false;
+    let turbo = false;
+
+    // Play background music
+    window.addEventListener('load', () => {
+      const bgMusic = document.getElementById('bg-music');
+      bgMusic.volume = 0.3;
+      bgMusic.play().catch(()=>{});
+    });
+
+    function playAudio(id, vol=0.8) {
+      let audio = document.getElementById(id);
+      if(audio) {
+        audio.currentTime = 0;
+        audio.volume = vol;
+        audio.play().catch(()=>{});
+      }
     }
 
-    function spin() {
-      if (inFreeSpins && freeSpins === 0) {
-        endFreeSpins();
+    function spin(isTurbo=false) {
+      if (freeSpins === 0 && balance < bet) {
+        showMessage("Not enough balance!");
         return;
       }
-      document.getElementById('message-bar').innerText = '';
-      const slotContainer = document.getElementById('slot-container');
-      slotContainer.innerHTML = '';
-      let scatterCount = 0;
-      let wildCount = 0;
-      let winAmount = 0;
-      let marineWin = false;
-
-      // 5x3 grid
-      let slots = [];
-      for (let r = 0; r < 3; r++) {
-        for (let c = 0; c < 5; c++) {
-          const symbol = getRandomSymbol();
-          slots.push(symbol);
-        }
-      }
-
-      // Render the slots, icons are replaceable
-      slots.forEach((symbol, idx) => {
-        const div = document.createElement('div');
-        div.classList.add('slot');
-        if (symbol.name === 'SCATTER') { div.classList.add('scatter'); scatterCount++; }
-        if (symbol.name === 'WILD') { div.classList.add('wild'); wildCount++; }
-        div.appendChild(renderSlotIcon(symbol));
-        slotContainer.appendChild(div);
-      });
-
-      // Check for 3 or more scatters anywhere
-      if (!inFreeSpins && scatterCount >= 3) {
-        setTimeout(() => { startFreeSpins(); }, 950);
-        document.getElementById('message-bar').innerText = "You've won Free Spins!";
-        return;
-      }
-
-      // Win logic: 3 horizontal lines, wild substitutes
-      let lines = [
-        [0,1,2,3,4], [5,6,7,8,9], [10,11,12,13,14]
-      ];
-      lines.forEach(line => {
-        let lineSymbols = line.map(i => slots[i].name);
-        let mainSym = lineSymbols.find(s => s !== 'WILD');
-        if (!mainSym) return;
-        let winLine = lineSymbols.every(s => s === mainSym || s === 'WILD');
-        if (winLine) {
-          let base = 2.00;
-          if (mainSym === 'A' || mainSym === 'K') base = 1.20;
-          if (mainSym === 'Q' || mainSym === 'J') base = 0.90;
-          if (mainSym === 'SCATTER') base = 5.00;
-          if (mainSym === 'WILD') base = 6.00;
-          winAmount += base * bet;
-        }
-      });
-
-      // In free spins, 90% chance of win (demo)
-      if (inFreeSpins && Math.random() < 0.9) {
-        marineWin = true;
-        winAmount += (Math.random() * 5 + 2) * bet; // $2-$7
-      }
-
-      if (!inFreeSpins) {
-        credit -= bet;
-      } else {
-        freeSpins--;
-        freeSpinWins += winAmount;
-      }
-
-      if (winAmount > 0) {
-        document.getElementById('message-bar').innerText = `Congratulations! You won $${winAmount.toFixed(2)}!`;
-        credit += winAmount;
-      } else if (inFreeSpins && marineWin) {
-        document.getElementById('message-bar').innerText = `Free Spin Win! You won $${winAmount.toFixed(2)}!`;
-        credit += winAmount;
-      }
+      turbo = isTurbo;
+      win = 0.00;
       updateUI();
+      playAudio('reel-sound', turbo ? 0.4 : 0.8);
 
-      if (inFreeSpins && freeSpins === 0) {
-        setTimeout(endFreeSpins, 1200);
+      // Generate slot grid (5x3)
+      let grid = [];
+      let scatterCount = 0, wildCount = 0, bonusCount = 0;
+      let slotGrid = document.getElementById('slot-grid');
+      slotGrid.innerHTML = '';
+
+      for(let r=0; r<3; r++) {
+        let row = [];
+        for(let c=0; c<5; c++) {
+          let symbol = getRandomSymbol();
+          row.push(symbol);
+          grid.push(symbol);
+        }
       }
+
+      // Animation: drop with dust, sparkle on win, highlight wild/scatter/bonus
+      grid.forEach((symbol, i) => {
+        let cell = document.createElement('div');
+        cell.className = 'slot-cell dust-drop';
+        if(symbol.type === 'wild') { cell.classList.add('wild'); wildCount++; }
+        if(symbol.type === 'scatter') { cell.classList.add('scatter'); scatterCount++; }
+        if(symbol.type === 'bonus') { cell.classList.add('bonus'); bonusCount++; }
+        let img = document.createElement('img');
+        img.src = symbol.img;
+        img.alt = symbol.name;
+        cell.appendChild(img);
+        slotGrid.appendChild(cell);
+        setTimeout(()=>{ cell.classList.remove('dust-drop'); }, 500+Math.random()*200);
+      });
+
+      // Check winning lines (3 horizontal, 2 diagonal)
+      let lines = [
+        [0,1,2,3,4], [5,6,7,8,9], [10,11,12,13,14], // Rows
+        [0,6,12,8,4], [10,6,2,8,14]                // Diagonals
+      ];
+      let winLines = [];
+      lines.forEach(line => {
+        let lineSyms = line.map(i => grid[i].name);
+        let mainSym = lineSyms.find(n => n !== "Wild");
+        if (!mainSym) return;
+        let winLine = lineSyms.every(s => s === mainSym || s === "Wild");
+        if (winLine) {
+          winLines.push(line);
+          let base = 7;
+          // Symbol value
+          if(["Pharaoh","Queen","Anubis","Scarab","Treasure"].includes(mainSym)) base = 12;
+          if(["Ankh","Sphinx","Horus"].includes(mainSym)) base = 5;
+          if(["A","K","Q","J","10"].includes(mainSym)) base = 2.5;
+          if(mainSym==="Wild") base = 22;
+          if(mainSym==="Scatter") base = 10;
+          win += base * bet;
+        }
+      });
+
+      // Animate winning lines
+      winLines.forEach(line => {
+        line.forEach(idx => {
+          setTimeout(()=>{
+            slotGrid.children[idx].classList.add('sparkle');
+            setTimeout(()=>slotGrid.children[idx].classList.remove('sparkle'), 700);
+          }, 250);
+        });
+      });
+
+      // Wild bonus: 3 wilds triggers payout boost, animation
+      if(wildCount>=3) {
+        win += 20*bet;
+        showMessage("3 Wilds! Goddess Blessing Bonus!");
+        playAudio('win-sound', 1.0);
+        slotGrid.childNodes.forEach(cell=>{
+          if(cell.classList.contains('wild')) cell.classList.add('sparkle');
+        });
+      }
+
+      // Scatter: 3+ triggers Free Spins
+      if(scatterCount>=3) {
+        setTimeout(()=>{
+          showFreeSpinsTransition();
+          playAudio('scatter-sound', 1.0);
+        }, 700);
+        freeSpins = 8;
+        inFreeSpins = true;
+        document.querySelector('.freespins').style.display = '';
+      }
+
+      // Bonus: 3+ triggers bonus game (not implemented)
+      if(bonusCount>=3) {
+        showMessage("Bonus Game Unlocked! (Demo)");
+        playAudio('win-sound', 1.0);
+      }
+
+      // Deduct bet unless in Free Spins
+      if(!inFreeSpins || freeSpins===0) balance -= bet;
+
+      // Free Spins
+      if(inFreeSpins && freeSpins>0) {
+        freeSpins--;
+        document.getElementById('freespins').innerText = freeSpins;
+        win += Math.random()*10*bet; // Demo win
+        if(freeSpins===0) {
+          inFreeSpins = false;
+          setTimeout(()=>showMessage("Free Spins Over!"), 1100);
+          document.querySelector('.freespins').style.display = 'none';
+        }
+      }
+
+      balance += win;
+      updateUI();
+      if(win>0) playAudio('win-sound', 0.7);
+      document.getElementById('win').innerText = win.toFixed(2);
+      if(win>0 && !wildCount>=3) showMessage(`You won $${win.toFixed(2)}!`);
+
+      // Turbo: instant next spin
+      if(turbo) setTimeout(()=>spin(true), 450);
+    }
+
+    function showMessage(msg) {
+      document.getElementById('message-bar').innerText = msg;
+      setTimeout(()=>document.getElementById('message-bar').innerText = '', 3500);
     }
 
     function updateUI() {
-      document.getElementById('credit').innerText = credit.toFixed(2);
+      document.getElementById('balance').innerText = balance.toFixed(2);
       document.getElementById('bet').innerText = bet.toFixed(2);
-      if (inFreeSpins) {
-        document.getElementById('info-bar').innerHTML = `
-          <span class="credits">CREDIT: <span id="credit">${credit.toFixed(2)}</span></span>
-          <span class="bet">BET: <span id="bet">${bet.toFixed(2)}</span></span>
-          <span class="freespins">FREE SPINS LEFT: <b>${freeSpins}</b></span>
-        `;
-      } else {
-        document.getElementById('info-bar').innerHTML = `
-          <span class="credits">CREDIT: <span id="credit">${credit.toFixed(2)}</span></span>
-          <span class="bet">BET: <span id="bet">${bet.toFixed(2)}</span></span>
-        `;
-      }
-    }
-
-    function startFreeSpins() {
-      inFreeSpins = true;
-      freeSpins = 8;
-      freeSpinWins = 0;
-      document.getElementById('message-bar').innerText = "8 Free Spins started!";
-      updateUI();
-    }
-
-    function endFreeSpins() {
-      inFreeSpins = false;
-      document.getElementById('message-bar').innerText = `Free Spins Over! Total Win: $${freeSpinWins.toFixed(2)}`;
-      updateUI();
+      document.getElementById('win').innerText = win.toFixed(2);
+      if(inFreeSpins) document.querySelector('.freespins').style.display = '';
+      else document.querySelector('.freespins').style.display = 'none';
     }
 
     function buyFreeSpins() {
-      if (credit < 200) {
-        document.getElementById('message-bar').innerText = "Not enough credits!";
-        return;
-      }
-      credit -= 200;
-      startFreeSpins();
+      if(balance<20) { showMessage("Not enough balance!"); return;}
+      balance-=20;
+      freeSpins=8;
+      inFreeSpins=true;
+      showFreeSpinsTransition();
       updateUI();
     }
 
-    function toggleInfoPanel() {
-      const panel = document.getElementById('info-panel');
-      panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+    function showFreeSpinsTransition() {
+      let frame = document.getElementById('slot-frame');
+      frame.style.boxShadow = "0 0 44px #2ecae6cc";
+      frame.style.background = "linear-gradient(135deg, #e7b14c 55%, #2ecae6 100%)";
+      showMessage("FREE SPINS MODE!");
+      setTimeout(()=>{
+        frame.style.boxShadow = "0 4px 22px #0008";
+        frame.style.background = "linear-gradient(135deg, #8f6c2e 50%, #ffe066 100%)";
+      }, 1200);
     }
 
     // Initial UI setup
