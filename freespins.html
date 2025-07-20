@@ -2,28 +2,64 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Free Spins!</title>
+  <title>Free Spins Mode</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #27ae60;
+      background: #111;
       color: #fff;
+      font-family: sans-serif;
       text-align: center;
-      padding-top: 50px;
     }
-    h1 {
-      font-size: 40px;
-      margin-bottom: 20px;
+    #slot-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 80px);
+      grid-template-rows: repeat(5, 80px);
+      gap: 8px;
+      justify-content: center;
+      margin-top: 20px;
     }
-    .spin-count {
-      font-size: 28px;
-      margin-bottom: 30px;
+    .slot-cell {
+      width: 80px;
+      height: 80px;
+      background: #222;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: cyan;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
-  <h1>🎉 You Won Free Spins!</h1>
-  <div class="spin-count">8 Free Spins Remaining</div>
-  <p>(This is a demo page. You can add spin logic here.)</p>
+  <h1>Free Spins Mode</h1>
+  <p>Score: <span id="score">0</span></p>
+  <div id="slot-grid"></div>
+  <button onclick="spin()">SPIN</button>
+  <script>
+    let spinsLeft = 8;
+    let score = 0;
+    const symbols = ['Diamond', 'Wild', 'Bonus'];
+
+    function spin() {
+      if (spinsLeft === 0) return alert('No spins left!');
+      spinsLeft--;
+      document.getElementById('slot-grid').innerHTML = '';
+      let diamonds = 0;
+      for (let i = 0; i < 25; i++) {
+        const symbol = symbols[Math.floor(Math.random() * symbols.length)];
+        const cell = document.createElement('div');
+        cell.className = 'slot-cell';
+        cell.innerText = symbol;
+        document.getElementById('slot-grid').appendChild(cell);
+        if (symbol === 'Diamond') diamonds++;
+      }
+      score += diamonds * 5;
+      document.getElementById('score').innerText = score;
+      if (spinsLeft === 0) alert('Free Spins Over! Total Score: ' + score);
+    }
+    spin();
+  </script>
 </body>
 </html>
