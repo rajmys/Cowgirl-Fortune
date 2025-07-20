@@ -3,9 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <title>Wild Quest Slot Game</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <style>
+    :root {
+      --slot-size: 19vw;
+      --slot-gap: 2vw;
+      --max-slot-size: 96px;
+      --icon-border-radius: 13px;
+    }
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Arial Rounded MT Bold', Arial, sans-serif;
       background-image: url('Assets/b4500597b63e63ca1f60af0477345247.jpg');
       background-repeat: no-repeat;
       background-size: cover;
@@ -13,128 +20,238 @@
       background-attachment: fixed;
       color: #fff;
       margin: 0;
+      min-height: 100vh;
     }
     h1 {
-      margin: 20px 0 5px 0;
-      text-shadow: 2px 2px 5px #000;
-      font-size: 45px;
-      letter-spacing: 2px;
+      margin: 18px 0 0 0;
+      font-size: 7vw;
+      line-height: 1;
+      text-shadow: 2px 2px 9px #0008;
+      letter-spacing: 1.5vw;
+      font-weight: bold;
+      text-align: center;
     }
-    #slot-game-ui {
-      background: rgba(18, 63, 82, 0.85);
+    #main-ui {
+      background: rgba(18, 63, 82, 0.89);
       margin: 0 auto;
-      border-radius: 18px;
+      border-radius: 3vw;
       max-width: 490px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-      padding: 20px 0 18px 0;
-      margin-bottom: 15px;
+      box-shadow: 0 8px 36px rgba(0,0,0,0.45);
+      padding: 2vw 0 2vw 0;
+      margin-bottom: 5vw;
     }
     #slot-container {
       display: grid;
-      grid-template-columns: repeat(5, 90px);
-      grid-template-rows: repeat(3, 90px);
-      gap: 7px;
+      grid-template-columns: repeat(5, minmax(0, var(--slot-size)));
+      grid-template-rows: repeat(3, minmax(0, var(--slot-size)));
+      gap: var(--slot-gap);
       justify-content: center;
-      margin: 15px auto 18px auto;
+      margin: 3vw auto 2vw auto;
+      max-width: calc(5 * var(--max-slot-size) + 4 * var(--slot-gap));
     }
     .slot {
-      width: 90px;
-      height: 90px;
-      background: linear-gradient(145deg, rgba(40,60,110,0.85) 80%, rgba(18,63,82,0.4) 100%);
+      background: linear-gradient(145deg, #1e304d 80%, #2ecae6 100%);
+      border: 2px solid #36b3d9;
+      border-radius: var(--icon-border-radius);
+      box-shadow: 0 2px 11px #172b3b55;
+      position: relative;
+      width: 100%;
+      height: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 32px;
-      color: #fff;
-      border: 3px solid #2ecae6;
-      border-radius: 12px;
-      box-shadow: 0 2px 7px rgba(0,0,0,0.5);
-      position: relative;
-      font-weight: bold;
-      letter-spacing: 1px;
-    }
-    .scatter {
-      color: #f1c40f;
-      font-weight: bold;
-      border: 3px solid #ffe066;
-      background: linear-gradient(135deg, #3053d8 70%, #9be3ff 100%);
-      box-shadow: 0 0 20px #ffe06680;
-    }
-    .wild {
-      color: #ff7272;
-      font-weight: bold;
-      border: 3px solid #ff7272;
-      background: linear-gradient(135deg, #fdbb2d 70%, #ff7272 100%);
-      box-shadow: 0 0 20px #ff727280;
+      overflow: hidden;
+      padding: 2px;
+      transition: box-shadow 0.2s;
     }
     .slot img {
-      max-width: 70px;
-      max-height: 70px;
-      border-radius: 10px;
+      max-width: 87%;
+      max-height: 87%;
+      border-radius: calc(var(--icon-border-radius) * 0.8);
       display: block;
       margin: auto;
+      box-shadow: 0 0 6px #0008;
+      background: #fff3;
+    }
+    .scatter {
+      border: 2.5px solid #ffe066;
+      box-shadow: 0 0 22px #ffe066a0;
+      background: linear-gradient(135deg, #3053d8 70%, #9be3ff 100%);
+    }
+    .wild {
+      border: 2.5px solid #ff7272;
+      box-shadow: 0 0 22px #ff7272a0;
+      background: linear-gradient(135deg, #fdbb2d 70%, #ff7272 100%);
     }
     #info-bar {
       display: flex;
-      justify-content: space-around;
+      justify-content: space-between;
       align-items: center;
-      margin: 12px 0 0 0;
+      margin: 3vw 4vw 0 4vw;
       color: #fff;
-      font-size: 20px;
+      font-size: 5vw;
+      gap: 2vw;
+      flex-wrap: wrap;
     }
     .credits, .bet {
       background: #2ecae6;
-      border-radius: 8px;
-      padding: 4px 14px;
+      border-radius: 1vw;
+      padding: 0.7vw 3vw;
       font-weight: bold;
-      box-shadow: 0 2px 8px #2ecae660;
+      box-shadow: 0 2px 8px #2ecae670;
     }
+    .freespins {
+      background: #ffe066;
+      color: #3053d8;
+      border-radius: 1vw;
+      padding: 0.7vw 2vw;
+      font-weight: bold;
+      box-shadow: 0 2px 8px #ffe06670;
+    }
+    .spin-btn, .buy-spins-btn {
+      display: block;
+      width: 100%;
+      max-width: 360px;
+      margin: 3vw auto 0 auto;
+      font-size: 6vw;
+      padding: 2.3vw 0;
+      border-radius: 3vw;
+      border: none;
+      font-weight: bold;
+      box-shadow: 0 2px 18px #fdbb2d90;
+      cursor: pointer;
+      transition: background 0.2s;
+      outline: none;
+      letter-spacing: 0.5vw;
+    }
+    .spin-btn {
+      background: linear-gradient(135deg, #fdbb2d 55%, #ffe066 100%);
+      color: #fff;
+      margin-bottom: 2vw;
+    }
+    .spin-btn:active { background: #ffe066; color: #3053d8; }
     .buy-spins-btn {
       background: linear-gradient(135deg, #3053d8 60%, #2ecae6 100%);
       color: #fff;
-      border: none;
-      border-radius: 10px;
-      padding: 12px 32px;
-      font-size: 20px;
-      font-weight: bold;
-      cursor: pointer;
-      box-shadow: 0 2px 8px #3053d880;
-      margin: 10px 0 0 0;
-      transition: background 0.2s;
+      margin-bottom: 0.8vw;
+      box-shadow: 0 2px 18px #3053d8a0;
     }
-    .buy-spins-btn:hover {
-      background: linear-gradient(135deg, #2ecae6 60%, #3053d8 100%);
-    }
-    .spin-btn {
-      background: #fdbb2d;
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      padding: 16px 54px;
-      font-size: 26px;
-      font-weight: bold;
-      cursor: pointer;
-      margin: 4px 0 0 0;
-      box-shadow: 0 2px 8px #fdbb2d80;
-      letter-spacing: 1px;
-      transition: background 0.2s;
-    }
-    .spin-btn:hover {
-      background: #ffe066;
-      color: #3053d8;
-    }
+    .buy-spins-btn:active { background: #2ecae6; color: #3053d8; }
     #message-bar {
-      margin: 18px 0 0 0;
+      margin: 2vw auto 0 auto;
+      font-size: 5vw;
+      font-weight: bold;
+      text-shadow: 1px 2px 8px #000;
+      text-align: center;
+      min-height: 6vw;
+      max-width: 85vw;
+    }
+    #line-icons {
+      display: flex;
+      justify-content: center;
+      gap: 6vw;
+      margin: 3vw 0 2vw 0;
+    }
+    .line-icon {
+      background: #fff;
+      border-radius: 50%;
+      width: 7vw;
+      height: 7vw;
+      min-width: 38px; min-height: 38px;
+      max-width: 52px; max-height: 52px;
+      font-size: 5vw;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px #3053d880;
+      color: #3053d8;
+      font-weight: bold;
+    }
+    #info-btn {
+      position: fixed;
+      right: 16px;
+      top: 16px;
+      background: #fff;
+      color: #3053d8;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      border: none;
+      box-shadow: 0 2px 8px #3053d880;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #info-panel {
+      position: fixed;
+      right: 22px;
+      top: 70px;
+      background: #fff;
+      color: #222;
+      border-radius: 22px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+      padding: 18px 24px;
+      max-width: 320px;
+      min-width: 220px;
+      font-size: 18px;
+      display: none;
+      z-index: 3;
+    }
+    #info-panel h2 {
+      margin-top: 0;
       font-size: 22px;
       font-weight: bold;
-      text-shadow: 1px 2px 6px #000;
+      color: #3053d8;
+    }
+    #info-panel button {
+      background: #3053d8;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 6px 18px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 12px;
+    }
+    @media (max-width: 600px) {
+      :root { --slot-size: 17vw; --slot-gap: 1.6vw; }
+      h1 { font-size: 8vw; }
+    }
+    @media (max-width: 420px) {
+      :root { --slot-size: 16vw; --slot-gap: 1.1vw; }
+      #main-ui { padding: 3vw 0 3vw 0; }
+      h1 { font-size: 10vw; }
+      #message-bar, #info-bar { font-size: 6vw; }
+      #line-icons { margin: 6vw 0 2vw 0; }
     }
   </style>
 </head>
 <body>
   <h1>Wild Quest</h1>
-  <div id="slot-game-ui">
+  <button id="info-btn" onclick="toggleInfoPanel()">i</button>
+  <div id="info-panel">
+    <h2>Game Info</h2>
+    <ul>
+      <li>5x3 slot grid, 3 pay lines (horizontal)</li>
+      <li>Trigger Free Spins by landing 3+ Scatter icons</li>
+      <li>Buy 8 Free Spins for $200 any time</li>
+      <li>Replace slot icons with your uploaded images</li>
+      <li>Credit, Bet, and Win info shown below</li>
+    </ul>
+    <button onclick="toggleInfoPanel()">Close</button>
+  </div>
+  <div id="main-ui">
     <div id="slot-container"></div>
+    <div id="line-icons">
+      <span class="line-icon" title="Top Line">&#8213;</span>
+      <span class="line-icon" title="Middle Line">&#8213;</span>
+      <span class="line-icon" title="Bottom Line">&#8213;</span>
+    </div>
     <div id="info-bar">
       <span class="credits">CREDIT: <span id="credit">500.00</span></span>
       <span class="bet">BET: <span id="bet">0.25</span></span>
@@ -143,22 +260,27 @@
     <button class="buy-spins-btn" onclick="buyFreeSpins()">BUY FREE SPINS $200</button>
     <div id="message-bar"></div>
   </div>
-
   <script>
-    // Symbol data for slot game, you can upgrade with image links if you have assets
-    // Demo: using emoji or colored letters, can be replaced with images later.
-    const symbols = [
-      { type: 'A', display: 'A', color: '#ff3e3e' },
-      { type: 'K', display: 'K', color: '#7bed9f' },
-      { type: 'Q', display: 'Q', color: '#70a1ff' },
-      { type: 'J', display: 'J', color: '#ffe066' },
-      { type: 'MAP', display: '🗺️', color: '#b2bec3' },
-      { type: 'ROPE', display: '🪢', color: '#55efc4' },
-      { type: 'PICK', display: '⛏️', color: '#636e72' },
-      { type: 'TENT', display: '🏕️', color: '#fab1a0' },
-      { type: 'SCATTER', display: '⛰️', color: '#3053d8' }, // 3+ triggers free spins
-      { type: 'WILD', display: '🧊', color: '#fdbb2d' } // substitutes, high payout
+    // Replace with your own uploaded images for each symbol.
+    // Example file names: Assets/A.png, Assets/K.png, etc.
+    const slotSymbols = [
+      { name: 'A', img: 'Assets/A.png' },
+      { name: 'K', img: 'Assets/K.png' },
+      { name: 'Q', img: 'Assets/Q.png' },
+      { name: 'J', img: 'Assets/J.png' },
+      { name: 'MAP', img: 'Assets/MAP.png' },
+      { name: 'ROPE', img: 'Assets/ROPE.png' },
+      { name: 'PICK', img: 'Assets/PICK.png' },
+      { name: 'TENT', img: 'Assets/TENT.png' },
+      { name: 'SCATTER', img: 'Assets/SCATTER.png' },
+      { name: 'WILD', img: 'Assets/WILD.png' }
     ];
+    // Fallback if image missing
+    const fallbackSymbol = {
+      'A': 'A', 'K': 'K', 'Q': 'Q', 'J': 'J',
+      'MAP': '🗺️', 'ROPE': '🪢', 'PICK': '⛏️', 'TENT': '🏕️',
+      'SCATTER': 'SCATTER', 'WILD': 'WILD'
+    };
 
     let credit = 500.00;
     let bet = 0.25;
@@ -167,20 +289,21 @@
     let freeSpinWins = 0;
 
     function getRandomSymbol() {
-      // Weighted random for higher chance of normal symbols, less for WILD/SCATTER
+      // Weighted random for normal, less for WILD/SCATTER
       const weighted = [
-        ...Array(6).fill(symbols[0]), // A
-        ...Array(5).fill(symbols[1]), // K
-        ...Array(5).fill(symbols[2]), // Q
-        ...Array(5).fill(symbols[3]), // J
-        ...Array(2).fill(symbols[4]), // MAP
-        ...Array(2).fill(symbols[5]), // ROPE
-        ...Array(2).fill(symbols[6]), // PICK
-        ...Array(2).fill(symbols[7]), // TENT
-        ...Array(1).fill(symbols[8]), // SCATTER
-        ...Array(1).fill(symbols[9]), // WILD
+        ...Array(6).fill(slotSymbols[0]), ...Array(5).fill(slotSymbols[1]), ...Array(5).fill(slotSymbols[2]), ...Array(5).fill(slotSymbols[3]),
+        ...Array(2).fill(slotSymbols[4]), ...Array(2).fill(slotSymbols[5]), ...Array(2).fill(slotSymbols[6]), ...Array(2).fill(slotSymbols[7]),
+        ...Array(1).fill(slotSymbols[8]), ...Array(1).fill(slotSymbols[9])
       ];
       return weighted[Math.floor(Math.random() * weighted.length)];
+    }
+
+    function renderSlotIcon(symbol) {
+      const img = document.createElement('img');
+      img.src = symbol.img;
+      img.alt = symbol.name;
+      img.onerror = function() { img.replaceWith(document.createTextNode(fallbackSymbol[symbol.name] || symbol.name)); };
+      return img;
     }
 
     function spin() {
@@ -188,7 +311,6 @@
         endFreeSpins();
         return;
       }
-
       document.getElementById('message-bar').innerText = '';
       const slotContainer = document.getElementById('slot-container');
       slotContainer.innerHTML = '';
@@ -206,50 +328,31 @@
         }
       }
 
-      // Render the slots
+      // Render the slots, icons are replaceable
       slots.forEach((symbol, idx) => {
         const div = document.createElement('div');
         div.classList.add('slot');
-        div.style.color = symbol.color;
-        if (symbol.type === 'SCATTER') {
-          div.classList.add('scatter');
-          div.innerText = symbol.display;
-          scatterCount++;
-        } else if (symbol.type === 'WILD') {
-          div.classList.add('wild');
-          div.innerText = symbol.display;
-          wildCount++;
-        } else {
-          div.innerText = symbol.display;
-        }
+        if (symbol.name === 'SCATTER') { div.classList.add('scatter'); scatterCount++; }
+        if (symbol.name === 'WILD') { div.classList.add('wild'); wildCount++; }
+        div.appendChild(renderSlotIcon(symbol));
         slotContainer.appendChild(div);
       });
 
       // Check for 3 or more scatters anywhere
       if (!inFreeSpins && scatterCount >= 3) {
-        setTimeout(() => {
-          startFreeSpins();
-        }, 1200);
+        setTimeout(() => { startFreeSpins(); }, 950);
         document.getElementById('message-bar').innerText = "You've won Free Spins!";
         return;
       }
 
-      // Win logic: 5 lines (horizontal only), wild substitutes
-      // Calculate wins, demo: 90% win rate in free spins, normal lower
+      // Win logic: 3 horizontal lines, wild substitutes
       let lines = [
-        [0,1,2,3,4], // Top
-        [5,6,7,8,9], // Middle
-        [10,11,12,13,14], // Bottom
-        [0,6,12,8,4], // Diagonal /
-        [10,6,2,8,14] // Diagonal \
+        [0,1,2,3,4], [5,6,7,8,9], [10,11,12,13,14]
       ];
       lines.forEach(line => {
-        let lineSymbols = line.map(i => slots[i].type);
-        let hasWild = lineSymbols.includes('WILD');
+        let lineSymbols = line.map(i => slots[i].name);
         let mainSym = lineSymbols.find(s => s !== 'WILD');
-        if (!mainSym) return; // all wilds, rare
-
-        // Normal win: all same or wild
+        if (!mainSym) return;
         let winLine = lineSymbols.every(s => s === mainSym || s === 'WILD');
         if (winLine) {
           let base = 2.00;
@@ -258,14 +361,13 @@
           if (mainSym === 'SCATTER') base = 5.00;
           if (mainSym === 'WILD') base = 6.00;
           winAmount += base * bet;
-          if (mainSym === 'WILD') wildCount++;
         }
       });
 
-      // In free spins, 90% chance of win (force a win for demo)
+      // In free spins, 90% chance of win (demo)
       if (inFreeSpins && Math.random() < 0.9) {
         marineWin = true;
-        winAmount += (Math.random() * 5 + 2) * bet; // demo: $2-$7
+        winAmount += (Math.random() * 5 + 2) * bet; // $2-$7
       }
 
       if (!inFreeSpins) {
@@ -284,7 +386,6 @@
       }
       updateUI();
 
-      // End free spins if needed
       if (inFreeSpins && freeSpins === 0) {
         setTimeout(endFreeSpins, 1200);
       }
@@ -329,6 +430,11 @@
       credit -= 200;
       startFreeSpins();
       updateUI();
+    }
+
+    function toggleInfoPanel() {
+      const panel = document.getElementById('info-panel');
+      panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
     }
 
     // Initial UI setup
